@@ -4,12 +4,12 @@
     
     <h3>Datos del Dueño</h3>
     
-    <!-- Primera fila: DNI y Nombre -->
     <div class="contenedor-doble">
-      <div class="form-group">
+       <div class="form-group">
         <label>DNI del Dueño:</label>
-        <!-- El evento (blur) se dispara al salir del campo -->
-        <input type="text" formControlName="duenoDni" (blur)="buscarPorDni()" placeholder="Ej: 12345678">
+        <input type="text" formControlName="duenoDni" 
+               (blur)="buscarPorDni()" 
+               [readonly]="authService.getUsuarioActual()?.rol === 'Cliente'">
       </div>
       <div class="form-group">
         <label>Nombre del Dueño:</label>

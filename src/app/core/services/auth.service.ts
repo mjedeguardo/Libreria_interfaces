@@ -5,11 +5,15 @@ import { Usuario, Rol } from '../models/usuario.model';
   providedIn: 'root'
 })
 export class AuthService {
-  // Usuarios "quemados" para simular la base de datos
+  // Usuarios simulados (Base de datos)
   private usuarios: Usuario[] = [
     { username: 'admin', password: '123', rol: 'Admin', nombre: 'Administrador' },
     { username: 'veterinario', password: '123', rol: 'Veterinario', nombre: 'Dr. Pérez' },
-    { username: 'cliente', password: '123', rol: 'Cliente', nombre: 'Juan Dueño' }
+    
+    // CLIENTES (Agregamos el DNI para que se autocomplete en el formulario)
+    { username: 'cliente', password: '123', rol: 'Cliente', nombre: 'Juan Dueño', dni: '12345678' },
+    { username: 'maria', password: '123', rol: 'Cliente', nombre: 'María López', dni: '87654321' },
+    { username: 'carlos', password: '123', rol: 'Cliente', nombre: 'Carlos Ruiz', dni: '11223344' }
   ];
 
   private usuarioLogueado: Usuario | null = null;

@@ -1,4 +1,4 @@
-<!-- SECCIÓN 1: MIS CITAS AGENDADAS -->
+<!-- SECCIÓN 1: MIS PRÓXIMAS CITAS -->
 <div class="card" *ngIf="citasPendientes.length > 0">
   <h2>Mis Próximas Citas</h2>
   <table>
@@ -8,42 +8,41 @@
         <th>Doctor</th>
         <th>Fecha y Hora</th>
         <th>Motivo</th>
+        <th>Estado</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let c of citasPendientes" [appResaltarProxima]="c.fecha">
-  <td>{{ c.mascota.nombre }}</td>
-  <td>{{ c.doctor }}</td>
-  <td>{{ c.fecha | date:'short' }}</td>
-  <td>{{ c.motivo }}</td>
-  <!-- AQUÍ SE USA EL PIPE (con el | ) -->
-  <td><span [ngClass]="c.estado | estadoCita">{{ c.estado }}</span></td>
-  <td>
-    <button class="btn-sm btn-rojo" (click)="cancelarCita(c)">Cancelar Cita</button>
-  </td>
-</tr>
+        <td>{{ c.mascota.nombre }}</td>
+        <td>{{ c.doctor }}</td>
+        <td>{{ c.fecha | date:'short' }}</td>
+        <td>{{ c.motivo }}</td>
+        <td><span [ngClass]="c.estado | estadoCita">{{ c.estado }}</span></td>
+        <td>
+          <button class="btn-sm btn-rojo" (click)="cancelarCita(c)">Cancelar Cita</button>
+        </td>
+      </tr>
     </tbody>
   </table>
 </div>
 
-<!-- SECCIÓN 2: PACIENTES E HISTORIAL -->
-<div class="contenedor-doble" style="margin-top: 20px;">
-  <div class="card">
-    <h2>Mis Pacientes</h2>
-    <ul class="lista">
-      <li *ngFor="let m of mascotas">
-        {{ m.nombre }} 
-        <button class="btn-sm btn-azul" (click)="ver(m)">Ver Historial</button>
-      </li>
-      <li *ngIf="mascotas.length === 0" style="justify-content: center; color: #888;">
-        No tienes pacientes registrados aún.
-      </li>
-    </ul>
+<!-- SECCIÓN 2: HISTORIAL DE MIS MASCOTAS -->
+<div class="card" style="margin-top: 20px;" *ngIf="mascotas.length > 0">
+  <h2>Historial de mis Mascotas</h2>
+  
+  <div class="form-group" style="max-width: 300px;">
+    <label>Selecciona una mascota:</label>
+    <select (change)="ver(mascotas[$any($event.target).selectedIndex - 1])">
+      <option value="" disabled selected>Seleccione...</option>
+      <option *ngFor="let m of mascotas" [value]="m.id">
+        {{ m.nombre }}
+      </option>
+    </select>
   </div>
 
-  <div class="card" *ngIf="seleccionada">
-    <h2>Historial de {{ seleccionada.nombre }}</h2>
+  <div *ngIf="seleccionada" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+    <h3>Historial de {{ seleccionada.nombre }}</h3>
     <p><strong>Dueño:</strong> {{ seleccionada.dueno.nombre }}</p>
     <p><strong>Especie:</strong> {{ seleccionada.especie }} | <strong>Edad:</strong> {{ seleccionada.edad }} años</p>
     <hr>
@@ -52,4 +51,9 @@
     </ul>
     <p *ngIf="seleccionada.historial.length === 0" style="color: #888;">Sin atenciones médicas aún.</p>
   </div>
+</div>
+
+<!-- Si el cliente no tiene nada aún, le mostramos un mensaje amigable -->
+<div class="card" *ngIf="citasPendientes.length === 0 && mascotas.length === 0">
+  <p style="text-align: center; color: #888;">No tienes citas ni mascotas registradas aún. ¡Agenda tu primera cita!</p>
 </div>

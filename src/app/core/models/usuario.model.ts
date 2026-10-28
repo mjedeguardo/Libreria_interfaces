@@ -5,4 +5,5 @@ export interface Usuario {
   password?: string;
   rol: Rol;
   nombre: string;
+  dni?: string; // <-- Agregamos esta línea
 }
