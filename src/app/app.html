@@ -1,0 +1,20 @@
+<nav class="navbar">
+  <!-- Admin y Veterinario ven la Agenda -->
+  <ng-container *ngIf="authService.tieneRol(['Admin', 'Veterinario'])">
+    <a routerLink="/citas" routerLinkActive="activo">Agenda</a>
+    <a routerLink="/mascotas" routerLinkActive="activo">Registrar Mascota</a>
+  </ng-container>
+
+  <!-- TODOS pueden agendar una cita -->
+  <a routerLink="/nueva-cita" routerLinkActive="activo">Agendar Cita</a>
+  
+  <!-- TODOS pueden ver el Historial -->
+  <a routerLink="/historial" routerLinkActive="activo">Historial</a>
+
+  <!-- Botón de salir -->
+  <a href="javascript:void(0)" (click)="salir()" class="logout">Cerrar Sesión ({{ authService.getUsuarioActual()?.nombre }})</a>
+</nav>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,22 @@
+<div class="card">
+  <h2>Citas Agendadas</h2>
+  <table>
+    <thead>
+      <tr><th>Mascota</th><th>Dueño</th><th>Doctor</th><th>Fecha</th><th>Motivo</th><th>Estado</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of citas" [appResaltarProxima]="c.fecha">
+        <td>{{ c.mascota.nombre }}</td>
+        <td>{{ c.mascota.dueno.nombre }}</td>
+        <td>{{ c.doctor }}</td>
+        <td>{{ c.fecha | date:'short' }}</td>
+        <td>{{ c.motivo }}</td>
+        <td><span [ngClass]="c.estado | estadoCita">{{ c.estado }}</span></td>
+        <td>
+          <button *ngIf="c.estado === 'Pendiente'" class="btn-sm btn-verde" (click)="atender(c)">Atender</button>
+          <button *ngIf="c.estado === 'Pendiente'" class="btn-sm btn-rojo" (click)="cancelar(c)">Cancelar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
