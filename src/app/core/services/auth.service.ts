@@ -10,6 +10,8 @@ export class AuthService {
     { username: 'admin', password: '123', rol: 'Admin', nombre: 'Administrador' },
     { username: 'veterinario', password: '123', rol: 'Veterinario', nombre: 'Dr. Pérez' },
     
+    //Trabajador 
+    { username: 'trabajador', password: '123', rol: 'Trabajador', nombre: 'Recepcionista' },
     // CLIENTES (Agregamos el DNI para que se autocomplete en el formulario)
     { username: 'cliente', password: '123', rol: 'Cliente', nombre: 'Juan Dueño', dni: '12345678' },
     { username: 'maria', password: '123', rol: 'Cliente', nombre: 'María López', dni: '87654321' },

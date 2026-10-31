@@ -36,8 +36,9 @@ export class NuevaCitaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // AQUÍ ESTÁ LA MAGIA: Si el usuario es Cliente, prellenamos sus datos
     const user = this.authService.getUsuarioActual();
+    
+    // Solo autocompletamos si es un Cliente. Si es Trabajador, los campos quedan vacíos para que él escriba.
     if (user && user.rol === 'Cliente') {
       this.citaForm.patchValue({
         duenoDni: user.dni,

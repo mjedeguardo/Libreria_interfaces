@@ -18,15 +18,19 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ingresar() {
+    ingresar() {
     if (this.authService.login(this.username, this.password)) {
-      // Redirigir según el rol
       const user = this.authService.getUsuarioActual();
+      
+      // Redirigimos según el rol del usuario
       if (user?.rol === 'Cliente') {
-        this.router.navigate(['/historial']); // El cliente solo ve su historial
+        this.router.navigate(['/historial']); 
+      } else if (user?.rol === 'Trabajador') {
+        this.router.navigate(['/trabajador']); // <-- Redirige al nuevo panel
       } else {
-        this.router.navigate(['/citas']); // Admin y Vet van a la agenda
+        this.router.navigate(['/citas']); // Admin y Veterinario van a la agenda
       }
+      
     } else {
       this.error = 'Usuario o contraseña incorrectos';
     }

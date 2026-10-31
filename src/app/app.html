@@ -14,7 +14,6 @@
 
     <!-- Cliente -->
     <ng-container *ngIf="authService.tieneRol(['Cliente'])">
-      <a routerLink="/nueva-cita" routerLinkActive="activo">Agendar Cita</a>
       <a routerLink="/historial" routerLinkActive="activo">Mi Historial</a>
     </ng-container>
 

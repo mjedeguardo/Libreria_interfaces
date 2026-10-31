@@ -1,0 +1,16 @@
+<div class="card">
+  <h2>Panel de Recepción</h2>
+  <p>Bienvenido, <strong>{{ authService.getUsuarioActual()?.nombre }}</strong>. Desde aquí puedes gestionar la atención de los clientes.</p>
+  
+  <div class="opciones-trabajador">
+    <div class="opcion" routerLink="/nueva-cita">
+      <h3>📅 Agendar Cita</h3>
+      <p>Registra una nueva cita para un cliente y su mascota.</p>
+    </div>
+
+    <div class="opcion" routerLink="/mascotas">
+      <h3>🐶 Registrar Mascota</h3>
+      <p>Ingresa una nueva mascota al sistema sin agendar cita.</p>
+    </div>
+  </div>
+</div>

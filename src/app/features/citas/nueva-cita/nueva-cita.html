@@ -7,6 +7,7 @@
     <div class="contenedor-doble">
        <div class="form-group">
         <label>DNI del Dueño:</label>
+        <!-- SOLO SE BLOQUEA SI ES CLIENTE -->
         <input type="text" formControlName="duenoDni" 
                (blur)="buscarPorDni()" 
                [readonly]="authService.getUsuarioActual()?.rol === 'Cliente'">
