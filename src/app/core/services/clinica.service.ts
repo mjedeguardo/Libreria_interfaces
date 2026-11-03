@@ -95,4 +95,8 @@ export class ClinicaService {
     if (m) this.mascotas = JSON.parse(m);
     if (c) this.citas = JSON.parse(c);
   }
+    // Método para guardar los cambios de una cita (como la nota médica)
+  actualizarCita(citaActualizada: Cita) {
+    this.guardarDatos();
+  }
 }

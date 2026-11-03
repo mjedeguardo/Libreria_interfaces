@@ -2,15 +2,31 @@
   <h2>Panel de Recepción</h2>
   <p>Bienvenido, <strong>{{ authService.getUsuarioActual()?.nombre }}</strong>. Desde aquí puedes gestionar la atención de los clientes.</p>
   
-  <div class="opciones-trabajador">
-    <div class="opcion" routerLink="/nueva-cita">
+  <div class="opciones-trabajador" style="display: flex; flex-direction: column; gap: 20px; margin-top: 20px;">
+    <!-- Opción 1: Agendar -->
+    <div class="opcion" routerLink="/nueva-cita" style="cursor: pointer; padding: 20px; border: 2px dashed #3498db; border-radius: 8px; text-align: center;">
       <h3>📅 Agendar Cita</h3>
       <p>Registra una nueva cita para un cliente y su mascota.</p>
     </div>
 
-    <div class="opcion" routerLink="/mascotas">
-      <h3>🐶 Registrar Mascota</h3>
-      <p>Ingresa una nueva mascota al sistema sin agendar cita.</p>
+    <!-- Opción 2: Buscar Receta -->
+    <div style="padding: 20px; border: 2px solid #2ecc71; border-radius: 8px;">
+      <h3>💊 Entregar Receta Médica</h3>
+      <p>Busca la receta del paciente por su DNI para imprimirla.</p>
+      <div class="form-group" style="display: flex; gap: 10px; margin-top: 10px;">
+        <input type="text" #dniInput placeholder="Ingrese DNI del cliente" style="flex: 1; padding: 8px;">
+        <button class="btn-azul" (click)="buscarReceta(dniInput.value)">Buscar</button>
+      </div>
+      
+     <!-- Aquí se mostrará la receta si la encuentra -->
+      <div *ngIf="recetaEncontrada" class="area-impresion" style="margin-top: 20px; background: #f9f9f9; padding: 15px; border-radius: 5px;">
+        <h4>Receta de {{ recetaEncontrada.mascota.nombre }}</h4>
+        <p>{{ recetaEncontrada.nota }}</p>
+        
+        <!-- Este botón NO se debe imprimir -->
+        <button class="btn-verde no-imprimir" (click)="imprimir()">🖨️ Imprimir Receta</button>
+      </div>
+      <p *ngIf="mensajeError" style="color: red; margin-top: 10px;">{{ mensajeError }}</p>
     </div>
   </div>
 </div>

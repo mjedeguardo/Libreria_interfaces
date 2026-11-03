@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClinicaService } from '../../../core/services/clinica.service';
-import { AuthService } from '../../../core/services/auth.service'; // <-- IMPORTANTE: Importar AuthService
+import { AuthService } from '../../../core/services/auth.service'; 
 import { Mascota, Especie } from '../../../core/models/mascota.model';
 import { Cita } from '../../../core/models/cita.model';
 
@@ -19,13 +19,13 @@ export class NuevaCitaComponent implements OnInit {
   especies = Object.values(Especie);
   doctores = ['Dr. Pérez (Medicina General)', 'Dra. Gómez (Cirugía)', 'Dr. Ruiz (Dermatología)'];
 
-  // Inyectamos el AuthService en el constructor
   constructor(private clinicaService: ClinicaService, private router: Router, public authService: AuthService) {
     this.citaForm = new FormGroup({
       duenoDni: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{8}$')]),
       duenoNombre: new FormControl('', Validators.required),
       duenoCorreo: new FormControl('', [Validators.required, Validators.email]), 
       duenoTelefono: new FormControl('', [Validators.required, Validators.pattern('^[0-9]+$')]),
+      contrasenaCliente: new FormControl('', [Validators.minLength(6), Validators.maxLength(12)]),
       mascotaNombre: new FormControl('', [Validators.required, Validators.minLength(2)]),
       especie: new FormControl('', Validators.required),
       edad: new FormControl('', [Validators.required, Validators.min(0)]),
@@ -37,8 +37,6 @@ export class NuevaCitaComponent implements OnInit {
 
   ngOnInit(): void {
     const user = this.authService.getUsuarioActual();
-    
-    // Solo autocompletamos si es un Cliente. Si es Trabajador, los campos quedan vacíos para que él escriba.
     if (user && user.rol === 'Cliente') {
       this.citaForm.patchValue({
         duenoDni: user.dni,
@@ -62,13 +60,13 @@ export class NuevaCitaComponent implements OnInit {
   }
 
   agendar() {
-    // ... tu método agendar() se queda igual que antes
     if (this.citaForm.valid) {
       const form = this.citaForm.value;
       const fechaCita = new Date(form.fechaHora);
 
+      // Validaciones
       if (!this.clinicaService.horarioDisponible(fechaCita)) {
-        alert('El horario seleccionado no está disponible.');
+        alert('El horario seleccionado no está disponible. Recuerda: Lunes a Sábado de 9:00 a 20:00 y sin repetir la hora.');
         return;
       }
 
@@ -77,6 +75,18 @@ export class NuevaCitaComponent implements OnInit {
         return;
       }
 
+      // LÓGICA NUEVA: Si el recepcionista escribió una contraseña, creamos la cuenta del cliente
+      if (form.contrasenaCliente && form.contrasenaCliente.trim() !== '') {
+        const creado = this.authService.registrarCliente(form.duenoDni, form.duenoNombre, form.contrasenaCliente);
+        if (!creado) {
+          // Si ya existe, no pasa nada, solo lo ignoramos y seguimos agendando
+          console.log('El cliente ya tenía una cuenta registrada.'); 
+        } else {
+          console.log('Cuenta de cliente creada con éxito.');
+        }
+      }
+
+      // Guardar cliente en la base de datos de la clínica (para historial)
       this.clinicaService.guardarCliente({
         dni: form.duenoDni,
         nombre: form.duenoNombre,

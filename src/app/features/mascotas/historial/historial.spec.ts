@@ -1,18 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Historial } from './historial';
+import { HistorialComponent } from './historial'; // <-- Cambiado a HistorialComponent
 
-describe('Historial', () => {
-  let component: Historial;
-  let fixture: ComponentFixture<Historial>;
+describe('HistorialComponent', () => {
+  let component: HistorialComponent;
+  let fixture: ComponentFixture<HistorialComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Historial],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(Historial);
+      imports: [HistorialComponent] // <-- Cambiado a HistorialComponent
+    })
+    .compileComponents();
+    
+    fixture = TestBed.createComponent(HistorialComponent); // <-- Cambiado a HistorialComponent
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {

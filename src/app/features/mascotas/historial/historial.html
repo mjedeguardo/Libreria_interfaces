@@ -1,7 +1,8 @@
 <!-- SECCIÓN 1: MIS PRÓXIMAS CITAS -->
- <div class="card" style="background-color: #e8f4f8; margin-bottom: 20px;">
+<div class="card" style="background-color: #e8f4f8; margin-bottom: 20px;">
   <p style="margin: 0;"><strong>Nota:</strong> Para agendar una nueva cita, por favor comuníquese al número de recepción <strong>(01) 555-1234</strong>.</p>
 </div>
+
 <div class="card" *ngIf="citasPendientes.length > 0">
   <h2>Mis Próximas Citas</h2>
   <table>
@@ -49,12 +50,13 @@
     <p><strong>Dueño:</strong> {{ seleccionada.dueno.nombre }}</p>
     <p><strong>Especie:</strong> {{ seleccionada.especie }} | <strong>Edad:</strong> {{ seleccionada.edad }} años</p>
     <hr>
+    
     <ul>
-      <li *ngFor="let h of seleccionada.historial">{{ h }}</li>
+      <li *ngFor="let h of seleccionada.historial" style="margin-bottom: 8px;">{{ h }}</li>
     </ul>
     <p *ngIf="seleccionada.historial.length === 0" style="color: #888;">Sin atenciones médicas aún.</p>
-  </div>
-</div>
+    
+
 
 <!-- Si el cliente no tiene nada aún, le mostramos un mensaje amigable -->
 <div class="card" *ngIf="citasPendientes.length === 0 && mascotas.length === 0">
