@@ -31,7 +31,7 @@
     </div>
          
         <div class="form-group">
-        <label>Contraseña para el Cliente (Opcional):</label>
+        <label>Contraseña para el Cliente :</label>
         <input type="text" formControlName="contrasenaCliente" placeholder="Mínimo 6, máximo 12 caracteres">
         <!-- Mensaje que aparece si se equivoca -->
         <small style="color: red;" *ngIf="citaForm.get('contrasenaCliente')?.invalid && citaForm.get('contrasenaCliente')?.touched">
