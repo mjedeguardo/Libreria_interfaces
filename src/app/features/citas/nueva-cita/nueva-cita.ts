@@ -59,6 +59,15 @@ export class NuevaCitaComponent implements OnInit {
     }
   }
 
+  // NUEVO MÉTODO: Calcula el precio según el motivo de la consulta
+  calcularPrecio(motivo: string): number {
+    const mot = motivo.toLowerCase();
+    if (mot.includes('cirugia') || mot.includes('cirugía') || mot.includes('operacion')) return 200;
+    if (mot.includes('vacuna') || mot.includes('vacunacion')) return 80;
+    if (mot.includes('emergencia') || mot.includes('urgencia')) return 150;
+    return 50; // Precio base de consulta general
+  }
+
   agendar() {
     if (this.citaForm.valid) {
       const form = this.citaForm.value;
@@ -79,7 +88,6 @@ export class NuevaCitaComponent implements OnInit {
       if (form.contrasenaCliente && form.contrasenaCliente.trim() !== '') {
         const creado = this.authService.registrarCliente(form.duenoDni, form.duenoNombre, form.contrasenaCliente);
         if (!creado) {
-          // Si ya existe, no pasa nada, solo lo ignoramos y seguimos agendando
           console.log('El cliente ya tenía una cuenta registrada.'); 
         } else {
           console.log('Cuenta de cliente creada con éxito.');
@@ -103,12 +111,16 @@ export class NuevaCitaComponent implements OnInit {
       );
       this.clinicaService.agregarMascota(nuevaMascota);
 
+      // Calculamos el precio antes de crear la cita
+      const precioCalculado = this.calcularPrecio(form.motivo);
+
       const nuevaCita = new Cita(
         Date.now().toString(),
         nuevaMascota,
         fechaCita,
         form.motivo,
-        form.doctor
+        form.doctor,
+        precioCalculado // <-- Pasamos el precio calculado
       );
       
       this.clinicaService.agregarCita(nuevaCita);

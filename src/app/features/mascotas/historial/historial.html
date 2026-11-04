@@ -5,30 +5,36 @@
 
 <div class="card" *ngIf="citasPendientes.length > 0">
   <h2>Mis Próximas Citas</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Mascota</th>
-        <th>Doctor</th>
-        <th>Fecha y Hora</th>
-        <th>Motivo</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let c of citasPendientes" [appResaltarProxima]="c.fecha">
-        <td>{{ c.mascota.nombre }}</td>
-        <td>{{ c.doctor }}</td>
-        <td>{{ c.fecha | date:'short' }}</td>
-        <td>{{ c.motivo }}</td>
-        <td><span [ngClass]="c.estado | estadoCita">{{ c.estado }}</span></td>
-        <td>
-          <button class="btn-sm btn-rojo" (click)="cancelarCita(c)">Cancelar Cita</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  
+  <!-- Envolvemos la tabla para que sea responsiva -->
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th>Mascota</th>
+          <th>Doctor</th>
+          <th>Fecha y Hora</th>
+          <th>Motivo</th>
+          <th>Costo</th> <!-- NUEVA COLUMNA -->
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of citasPendientes" [appResaltarProxima]="c.fecha">
+          <td>{{ c.mascota.nombre }}</td>
+          <td>{{ c.doctor }}</td>
+          <td>{{ c.fecha | date:'short' }}</td>
+          <td>{{ c.motivo }}</td>
+          <td><strong>S/ {{ c.precio | number:'1.2-2' }}</strong></td> <!-- MOSTRAMOS EL PRECIO -->
+          <td><span [ngClass]="c.estado | estadoCita">{{ c.estado }}</span></td>
+          <td>
+            <button class="btn-sm btn-rojo" (click)="cancelarCita(c)">Cancelar Cita</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <!-- SECCIÓN 2: HISTORIAL DE MIS MASCOTAS -->
@@ -55,8 +61,8 @@
       <li *ngFor="let h of seleccionada.historial" style="margin-bottom: 8px;">{{ h }}</li>
     </ul>
     <p *ngIf="seleccionada.historial.length === 0" style="color: #888;">Sin atenciones médicas aún.</p>
-    
-
+  </div>
+</div>
 
 <!-- Si el cliente no tiene nada aún, le mostramos un mensaje amigable -->
 <div class="card" *ngIf="citasPendientes.length === 0 && mascotas.length === 0">

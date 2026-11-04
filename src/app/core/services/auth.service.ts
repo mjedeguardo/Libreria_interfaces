@@ -25,7 +25,7 @@ export class AuthService {
     return [...this.usuariosBase, ...clientes];
   }
 
-  // MÉTODO NUEVO: El recepcionista crea la cuenta del cliente
+  // Método NUEVO: El recepcionista crea la cuenta del cliente
   registrarCliente(dni: string, nombre: string, password: string): boolean {
     const usuarios = this.getUsuarios();
     // Validar si el DNI ya existe
