@@ -1,28 +1,33 @@
-<nav class="navbar">
-  <!-- SOLO SI HAY UN USUARIO LOGUEADO, MOSTRAMOS LOS BOTONES -->
-  <ng-container *ngIf="authService.getUsuarioActual()">
+<ng-container *ngIf="authService.getUsuarioActual()">
+  <nav class="navbar">
     
-    <!-- Admin -->
+    <!-- ADMINISTRADOR: Ve su panel y la agenda general -->
     <ng-container *ngIf="authService.tieneRol(['Admin'])">
+      <a routerLink="/admin" routerLinkActive="activo">Panel Admin</a>
       <a routerLink="/citas" routerLinkActive="activo">Agenda General</a>
     </ng-container>
 
-    <!-- Veterinario -->
+    <!-- VETERINARIO: Ve sus pacientes (la agenda) -->
     <ng-container *ngIf="authService.tieneRol(['Veterinario'])">
       <a routerLink="/citas" routerLinkActive="activo">Mis Pacientes</a>
     </ng-container>
 
-    <!-- Cliente -->
+    <!-- TRABAJADOR (Recepción): Ve su panel para agendar y buscar recetas -->
+    <ng-container *ngIf="authService.tieneRol(['Trabajador'])">
+      <a routerLink="/trabajador" routerLinkActive="activo">Panel de Recepción</a>
+    </ng-container>
+
+    <!-- CLIENTE: Solo ve su historial -->
     <ng-container *ngIf="authService.tieneRol(['Cliente'])">
       <a routerLink="/historial" routerLinkActive="activo">Mi Historial</a>
     </ng-container>
 
-    <!-- Botón de salir -->
+    <!-- Botón de salir (todos lo ven) -->
     <a href="javascript:void(0)" (click)="salir()" class="logout">Cerrar Sesión ({{ authService.getUsuarioActual()?.nombre }})</a>
-  
-  </ng-container>
-</nav>
+  </nav>
+</ng-container>
 
+<!-- Aquí se cargan las vistas -->
 <div class="container">
   <router-outlet></router-outlet>
 </div>

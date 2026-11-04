@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -11,26 +11,30 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   username = '';
   password = '';
   error = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(public authService: AuthService, private router: Router) {}
 
-    ingresar() {
+  ngOnInit(): void {
+    this.redirigirSiEstaLogueado();
+  }
+
+  redirigirSiEstaLogueado() {
+    const user = this.authService.getUsuarioActual();
+    if (user) {
+      if (user.rol === 'Cliente') this.router.navigate(['/historial']); 
+      else if (user.rol === 'Trabajador') this.router.navigate(['/trabajador']); 
+      else if (user.rol === 'Admin') this.router.navigate(['/admin']); 
+      else this.router.navigate(['/citas']); 
+    }
+  }
+
+  ingresar() {
     if (this.authService.login(this.username, this.password)) {
-      const user = this.authService.getUsuarioActual();
-      
-      // Redirigimos según el rol del usuario
-      if (user?.rol === 'Cliente') {
-        this.router.navigate(['/historial']); 
-      } else if (user?.rol === 'Trabajador') {
-        this.router.navigate(['/trabajador']); // <-- Redirige al nuevo panel
-      } else {
-        this.router.navigate(['/citas']); // Admin y Veterinario van a la agenda
-      }
-      
+      this.redirigirSiEstaLogueado();
     } else {
       this.error = 'Usuario o contraseña incorrectos';
     }

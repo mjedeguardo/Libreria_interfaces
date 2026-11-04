@@ -1,27 +1,32 @@
-<div class="login-container">
-  <div class="card login-card">
-    <h2>Iniciar Sesión</h2>
-    <p class="subtitle">VetClinic - Gestión Veterinaria</p>
-    
-    <div class="form-group">
-      <label>Usuario:</label>
-      <input type="text" [(ngModel)]="username" placeholder="Ingrese su usuario o DNI">
-    </div>
-    
-    <div class="form-group">
-      <label>Contraseña:</label>
-      <input type="password" [(ngModel)]="password" placeholder="Ingrese su contraseña">
-    </div>
+<!-- Si NO hay usuario, muestra el login. Si hay usuario, lo oculta y navega -->
+<ng-container *ngIf="!authService.getUsuarioActual()">
+  
+  <div class="login-container">
+    <div class="card login-card">
+      <h2>Iniciar Sesión</h2>
+      <p class="subtitle">VetClinic - Gestión Veterinaria</p>
+      
+      <div class="form-group">
+        <label>Usuario:</label>
+        <input type="text" [(ngModel)]="username" placeholder="Ingrese su usuario o DNI">
+      </div>
+      
+      <div class="form-group">
+        <label>Contraseña:</label>
+        <input type="password" [(ngModel)]="password" placeholder="Ingrese su contraseña">
+      </div>
 
-    <p *ngIf="error" class="error-msg">{{ error }}</p>
-    
-    <button (click)="ingresar()" class="btn-login">Ingresar</button>
-    
-    <div class="info-box">
-      <small><strong>Usuarios de prueba:</strong><br>
-      Admin: admin/123<br>
-      Vet: veterinario/123<br>
-      Recepción: trabajador/123</small>
+      <p *ngIf="error" class="error-msg">{{ error }}</p>
+      
+      <button (click)="ingresar()" class="btn-login">Ingresar</button>
+      
+      <div class="info-box">
+        <small><strong>Usuarios de prueba:</strong><br>
+        Admin: admin/123<br>
+        Vet: veterinario/123<br>
+        Recepción: trabajador/123</small>
+      </div>
     </div>
   </div>
-</div>
+
+</ng-container>

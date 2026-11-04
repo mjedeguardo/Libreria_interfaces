@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { ClinicaService } from '../../../core/services/clinica.service';
+import { AuthService } from '../../../core/services/auth.service'; // <-- IMPORTANTE: Traer el AuthService
 import { Cita } from '../../../core/models/cita.model';
 import { EstadoCitaPipe } from '../../../shared/pipes/estado-cita-pipe'; 
 import { ResaltarProximaDirective } from '../../../shared/directives/resaltar-proxima';
@@ -18,30 +19,35 @@ export class AgendaComponent implements OnInit {
   citaAtendiendo: Cita | null = null;
   notaMedica: string = '';
 
-  constructor(private clinicaService: ClinicaService) {}
+  // Inyectamos el AuthService como public para usarlo en el HTML
+  constructor(private clinicaService: ClinicaService, public authService: AuthService) {}
 
   ngOnInit() { this.actualizar(); }
 
-  actualizar() {
-    this.citas = this.clinicaService.getCitas();
+   actualizar() {
+    const todasLasCitas = this.clinicaService.getCitas();
+    
+    // Si es admin, solo le mostramos las atendidas
+    if (this.authService.tieneRol(['Admin'])) {
+      this.citas = todasLasCitas.filter(c => c.estado === 'Atendida');
+    } else {
+      this.citas = todasLasCitas;
+    }
   }
 
   // 1. Al dar click en Atender o Ver Receta
   abrirModalAtencion(cita: Cita) {
     this.citaAtendiendo = cita;
     
-    // LÓGICA CORREGIDA: Si la cita ya está atendida, buscamos la nota para mostrarla
     if (cita.estado === 'Atendida' && cita.mascota.historial.length > 0) {
       const ultimaNota = cita.mascota.historial[cita.mascota.historial.length - 1];
       
-      // Cortamos el texto para quitarle la fecha y dejar solo lo que escribió el doctor
       if (ultimaNota.includes(': ')) {
         this.notaMedica = ultimaNota.split(': ').pop() || ''; 
       } else {
         this.notaMedica = ultimaNota;
       }
     } else {
-      // Si está pendiente, el cuadro va vacío
       this.notaMedica = ''; 
     }
   }

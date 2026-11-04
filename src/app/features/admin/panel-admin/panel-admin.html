@@ -1,0 +1,29 @@
+<div class="card">
+  <h2>Panel de Administración</h2>
+  <p>Bienvenido, <strong>{{ authService.getUsuarioActual()?.nombre }}</strong>. Aquí tienes el resumen de la clínica.</p>
+  
+  <!-- Tarjetas de Resumen -->
+  <div class="grid-citas" style="margin-top: 20px;">
+    <div class="cita-card" style="border-left-color: #3498db;">
+      <h3>🐶 Pacientes</h3>
+      <h1 style="font-size: 40px; margin: 10px 0; color: #2c3e50;">{{ totalMascotas }}</h1>
+      <p>Mascotas registradas</p>
+    </div>
+
+    <div class="cita-card" style="border-left-color: #f39c12;">
+      <h3>📅 Citas</h3>
+      <h1 style="font-size: 40px; margin: 10px 0; color: #2c3e50;">{{ totalCitas }}</h1>
+      <p>Citas en total</p>
+    </div>
+
+    <div class="cita-card" style="border-left-color: #e74c3c;">
+      <h3>⏳ Pendientes</h3>
+      <h1 style="font-size: 40px; margin: 10px 0; color: #2c3e50;">{{ citasPendientes }}</h1>
+      <p>Por atender</p>
+    </div>
+  </div>
+
+  <div style="margin-top: 30px;">
+    <a routerLink="/citas" class="btn-azul" style="text-decoration: none; padding: 10px 20px; border-radius: 5px;">Ver Agenda General</a>
+  </div>
+</div>

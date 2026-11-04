@@ -1,44 +1,67 @@
-<div class="card">
-  <h2>Mis Pacientes Agendados</h2>
+<!-- VISTA DEL ADMINISTRADOR: Solo lectura de atendidos -->
+<div class="card" *ngIf="authService.tieneRol(['Admin'])">
+  <h2>Pacientes Atendidos</h2>
+  <p style="color: #666; margin-bottom: 15px;">Listado de todos los pacientes que ya fueron atendidos por los veterinarios.</p>
   
-  <!-- Si no hay citas -->
+  <p *ngIf="citas.length === 0" style="color: #888; text-align: center;">Aún no hay pacientes atendidos.</p>
+
+  <!-- Contenedor con scroll horizontal para móviles -->
+  <div class="table-responsive" *ngIf="citas.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Mascota</th>
+          <th>Dueño</th>
+          <th>Doctor</th>
+          <th>Fecha</th>
+          <th>Motivo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of citas">
+          <td>{{ c.mascota.nombre }}</td>
+          <td>{{ c.mascota.dueno.nombre }}</td>
+          <td>{{ c.doctor }}</td>
+          <td>{{ c.fecha | date:'short' }}</td>
+          <td>{{ c.motivo }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- VISTA DEL VETERINARIO: Tarjetas interactivas -->
+<div class="card" *ngIf="authService.tieneRol(['Veterinario'])">
+  <h2>Mis Pacientes Agendados</h2>
   <p *ngIf="citas.length === 0" style="color: #888; text-align: center;">No tienes citas pendientes por atender.</p>
 
-  <!-- Contenedor de Tarjetas -->
   <div class="grid-citas">
     <div class="cita-card" *ngFor="let c of citas" [appResaltarProxima]="c.fecha">
-      
       <div class="cita-header">
         <h3>🐶 {{ c.mascota.nombre }} <span class="badge" [ngClass]="c.estado | estadoCita">{{ c.estado }}</span></h3>
         <p class="dueno">Dueño: <strong>{{ c.mascota.dueno.nombre }}</strong></p>
       </div>
-
       <div class="cita-body">
         <p><strong>Fecha:</strong> {{ c.fecha | date:'medium' }}</p>
         <p><strong>Motivo:</strong> {{ c.motivo }}</p>
       </div>
-
       <div class="cita-actions">
-        <!-- Botones para Pendientes -->
         <ng-container *ngIf="c.estado === 'Pendiente'">
           <button class="btn-verde" (click)="abrirModalAtencion(c)">Atender</button>
           <button class="btn-rojo" (click)="cancelarCita(c)">Cancelar</button>
         </ng-container>
-        
-        <!-- Botón para Atendidas (Ver receta) -->
         <button *ngIf="c.estado === 'Atendida'" class="btn-azul" (click)="abrirModalAtencion(c)">Ver Receta</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- EL MODAL CORREGIDO -->
+<!-- EL MODAL (Se queda igual) -->
 <div class="modal-overlay" *ngIf="citaAtendiendo">
   <div class="modal-content">
     <h2>Atención Médica</h2>
     <p><strong>Paciente:</strong> {{ citaAtendiendo.mascota.nombre }}</p>
     
-    <!-- SI ESTÁ PENDIENTE: Mostramos el cuadro para escribir -->
     <ng-container *ngIf="citaAtendiendo.estado === 'Pendiente'">
       <div class="form-group">
         <label>Nota Médica / Receta:</label>
@@ -46,17 +69,13 @@
       </div>
     </ng-container>
 
-    <!-- SI YA ESTÁ ATENDIDA: Mostramos solo el texto (sin cuadro de texto) -->
     <ng-container *ngIf="citaAtendiendo.estado === 'Atendida'">
       <div class="form-group">
         <label>Receta Médica Registrada:</label>
-        <p style="background: #f9f9f9; padding: 15px; border-radius: 5px; border: 1px solid #ddd; white-space: pre-wrap;">
-          {{ notaMedica }}
-        </p>
+        <p style="background: #f9f9f9; padding: 15px; border-radius: 5px; border: 1px solid #ddd; white-space: pre-wrap;">{{ notaMedica }}</p>
       </div>
     </ng-container>
 
-    <!-- Botones -->
     <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;">
       <ng-container *ngIf="citaAtendiendo.estado === 'Pendiente'">
         <button class="btn-rojo" (click)="cancelarAtencion()">Cancelar</button>
